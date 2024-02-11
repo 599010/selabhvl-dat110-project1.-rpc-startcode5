@@ -1,6 +1,5 @@
 package no.hvl.dat110.system.controller;
 
-import no.hvl.dat110.TODO;
 import no.hvl.dat110.rpc.*;
 
 public class DisplayStub extends RPCLocalStub {
@@ -9,16 +8,19 @@ public class DisplayStub extends RPCLocalStub {
 		super(rpcclient);
 	}
 	
-	public void write (String message) {
+	public void write(String message) {
+		Byte rpcid = null;
+		// marshal the string into a byte array
+		byte[] messageEncoded = RPCUtils.marshallString(message);
 		
-		// TODO - START
+		// encapsulate the message and rpcid in a byte array
+		byte[] request = RPCUtils.encapsulate((byte)0, messageEncoded);
 		
-		// implement marshalling, call and unmarshalling for write RPC method
+		// make the RPC call
+		byte[] response = rpcclient.call((byte)Common.READ_RPCID,request);
 		
-		if (true)
-			throw new UnsupportedOperationException(TODO.method());
-		
-		// TODO - END
+		// unmarshall the response (void method has no return value)
+		RPCUtils.unmarshallVoid(response);
 		
 	}
 }

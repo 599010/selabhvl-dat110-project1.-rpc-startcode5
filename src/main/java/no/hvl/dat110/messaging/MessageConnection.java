@@ -6,7 +6,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-import no.hvl.dat110.TODO;
+//import no.hvl.dat110.TODO;
 
 
 public class MessageConnection {
@@ -33,34 +33,37 @@ public class MessageConnection {
 	}
 
 	public void send(Message message) {
+	    try {
+	        // Encapsulate the data contained in the Message
+	        byte[] data = MessageUtils.encapsulate(message);
 
-		byte[] data;
-		
-		// TODO - START
-		// encapsulate the data contained in the Message and write to the output stream
-		
-		if (true)
-			throw new UnsupportedOperationException(TODO.method());
-			
-		// TODO - END
+	        // Write to the output stream
+	        outStream.write(data);
 
+	    } catch (IOException e) {
+	        System.out.println("MessageConnection send error: " + e.getMessage());
+	        e.printStackTrace();
+	    }
 	}
 
-	public Message receive() {
 
-		Message message = null;
-		byte[] data;
-		
-		// TODO - START
-		// read a segment from the input stream and decapsulate data into a Message
-		
-		if (true)
-			throw new UnsupportedOperationException(TODO.method());
-		
-		// TODO - END
-		
-		return message;
-		
+	public Message receive() {
+	    Message message = null; // Declare the message variable
+
+	    try {
+	        // Read a segment from the input stream
+	        byte[] segment = new byte[MessageUtils.SEGMENTSIZE];
+	        inStream.readFully(segment); // This method will block until the specified number of bytes are read
+
+	        // Decapsulate data into a Message
+	        message = MessageUtils.decapsulate(segment);
+
+	    } catch (IOException e) {
+	        System.out.println("MessageConnection receive error: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+
+	    return message;
 	}
 
 	// close the connection by closing streams and the underlying socket	
